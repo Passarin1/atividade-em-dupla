@@ -6,7 +6,7 @@ const personagens = {
     balanceado: { nome: "Balanceado", vida: 85, ataque: 18, defesa: 9 }
 };
 
-prompt // add o propite para o usuario enteragir com o jogo
+prompt // add o propite para o usuario enteragir com o jogo ,
 
 // Criaturas Demônios Menores
 const demonioMenor = { nome: "Demônio Menor", vida: 40, ataque: 12, defesa: 4 };
