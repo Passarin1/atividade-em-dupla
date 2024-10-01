@@ -6,6 +6,8 @@ const personagens = {
     balanceado: { nome: "Balanceado", vida: 85, ataque: 18, defesa: 9 }
 };
 
+prompt // add o propite para o usuario enteragir com o jogo
+
 // Criaturas Demônios Menores
 const demonioMenor = { nome: "Demônio Menor", vida: 40, ataque: 12, defesa: 4 };
 
@@ -13,13 +15,6 @@ const demonioMenor = { nome: "Demônio Menor", vida: 40, ataque: 12, defesa: 4 }
 const guardiao = { nome: "Guardião Demoníaco", vida: 150, ataque: 20, defesa: 8 };
 
 let jogador;
-
-// Função para exibir mensagens na tela
-function exibirMensagem(mensagem) {
-    const output = document.getElementById("output");
-    output.innerHTML += mensagem + "<br>";
-    output.scrollTop = output.scrollHeight;
-}
 
 // Função de rolar dados d100
 function rolarDado() {
@@ -33,15 +28,15 @@ function atacar(atacante, defensor) {
         let dano = atacante.ataque - defensor.defesa;
         if (dano < 0) dano = 0;
         defensor.vida -= dano;
-        exibirMensagem(${atacante.nome} acertou! Causou ${dano} de dano.);
+        console.log(`${atacante.nome} acertou! Causou ${dano} de dano.`);
     } else {
-        exibirMensagem(${atacante.nome} errou o ataque!);
+        console.log(`${atacante.nome} errou o ataque!`);
     }
 }
 
 // Função para iniciar o combate
 function iniciarCombate(inimigo) {
-    exibirMensagem(Você encontrou um ${inimigo.nome}! Prepare-se para lutar!);
+    console.log(`Você encontrou um ${inimigo.nome}! Prepare-se para lutar!`);
 
     while (jogador.vida > 0 && inimigo.vida > 0) {
         atacar(jogador, inimigo);
@@ -51,33 +46,55 @@ function iniciarCombate(inimigo) {
     }
 
     if (jogador.vida > 0) {
-        exibirMensagem(Você derrotou o ${inimigo.nome}!);
+        console.log(`Você derrotou o ${inimigo.nome}!`);
     } else {
-        exibirMensagem("Você foi derrotado!");
+        console.log("Você foi derrotado!");
     }
 }
 
 // Função para selecionar personagem
-function selecionarPersonagem() {
-    let escolha = prompt("Escolha seu personagem: Cavaleiro, Mago, Arqueiro, Balanceado").toLowerCase();
-    if (personagens[escolha]) {
-        jogador = { ...personagens[escolha] };
-        exibirMensagem(Você escolheu: jogador.nome);
+function selecionarPersonagem(personagemEscolhido) {
+    if (personagens[personagemEscolhido]) {
+        jogador = { ...personagens[personagemEscolhido] };
+        console.log(`Você escolheu: ${jogador.nome}`);
         iniciarMissao();
     } else {
-        exibirMensagem("Escolha inválida. Tente novamente.");
-        selecionarPersonagem();
+        console.log("Personagem inválido. Escolha entre: cavaleiro, mago, arqueiro, balanceado.");
     }
 }
 
 // Função de iniciar a missão
 function iniciarMissao() {
-    exibirMensagem("Sua missão é explorar as ruínas e encontrar o artefato mágico.");
+    console.log("Sua missão é explorar as ruínas e encontrar o artefato mágico.");
     iniciarCombate(demonioMenor);
     if (jogador.vida > 0) {
         iniciarCombate(guardiao);
         if (jogador.vida > 0) {
-            exibirMensagem("Parabéns! Você recuperou o artefato mágico.");
+            entregarArtefato();
         }
     }
 }
+
+// Função para entregar o artefato
+function entregarArtefato() {
+    const entrega = prompt("Você derrotou o Guardião! Deseja entregar o artefato ao rei? (sim/não)").toLowerCase();
+    
+    if (entrega === 'sim') {
+        console.log("Parabéns! Você entregou o artefato ao rei e completou sua missão!");
+    } else if (entrega === 'não') {
+        console.log("Você decidiu não entregar o artefato. Sua aventura continua...");
+        // Aqui você pode adicionar mais lógica se desejar
+    } else {
+        console.log("Resposta inválida. O artefato ainda está com você.");
+        entregarArtefato(); // Pergunta novamente
+    }
+}
+
+// Alerta de boas-vindas ao iniciar o jogo
+alert("Bem-vindo ao jogo de RPG 'Missão das Ruínas Antigas'!\n" +
+      "Escolha seu personagem digitando: \nselecionar Personagem(Cavaleiro)" +
+      "\nselecionar Personagem(Mago)\nselecionar Personagem(Arqueiro)" +
+      "\nselecionar Personagem(Balanceado)");
+
+// Exemplo de chamada inicial
+console.log("Digite seu personagem para começar a aventura!");
