@@ -1,12 +1,10 @@
 // Personagens
 const personagens = {
-    cavaleiro: { nome: "Cavaleiro", vida: 100, ataque: 15, defesa: 10 },
-    mago: { nome: "Mago", vida: 70, ataque: 25, defesa: 5 },
-    arqueiro: { nome: "Arqueiro", vida: 80, ataque: 20, defesa: 8 },
-    balanceado: { nome: "Balanceado", vida: 85, ataque: 18, defesa: 9 }
+    cavaleiro: { nome: "Cavaleiro", vida: 100, ataque: 15, defesa: 10, magia: null, itens: [] },
+    mago: { nome: "Mago", vida: 70, ataque: 25, defesa: 5, magia: "Bola de Fogo", itens: [] },
+    arqueiro: { nome: "Arqueiro", vida: 80, ataque: 20, defesa: 8, magia: null, itens: [] },
+    personalizado: { nome: "personalizado", vida: 85, ataque: 18, defesa: 9, magia: "Raio", itens: [] }
 };
-
-prompt // add o propite para o usuario enteragir com o jogo ,
 
 // Criaturas Demônios Menores
 const demonioMenor = { nome: "Demônio Menor", vida: 40, ataque: 12, defesa: 4 };
@@ -21,7 +19,7 @@ function rolarDado() {
     return Math.floor(Math.random() * 100) + 1;
 }
 
-// Função de ataque
+// Função de atacar
 function atacar(atacante, defensor) {
     let rolagem = rolarDado();
     if (rolagem > 50) {  // Chance de acerto
@@ -34,32 +32,67 @@ function atacar(atacante, defensor) {
     }
 }
 
+// Função de defesa
+function defender(atacante, defensor) {
+    console.log(`${defensor.nome} se preparou para defender!`);
+    defensor.defesa *= 2; // Aumenta a defesa temporariamente
+}
+
+// Função de usar magia
+function usarMagia(atacante, defensor) {
+    if (atacante.magia) {
+        console.log(`${atacante.nome} usou ${atacante.magia}!`);
+        let dano = 30; // Dano fixo para magia
+        defensor.vida -= dano;
+        console.log(`${defensor.nome} recebeu ${dano} de dano.`);
+    } else {
+        console.log(`${atacante.nome} não tem magia para usar!`);
+    }
+}
+
+// Função de fugir
+function fugir() {
+    console.log("Você conseguiu fugir da batalha!");
+    return true;
+}
+
 // Função para iniciar o combate
 function iniciarCombate(inimigo) {
     console.log(`Você encontrou um ${inimigo.nome}! Prepare-se para lutar!`);
 
     while (jogador.vida > 0 && inimigo.vida > 0) {
-        atacar(jogador, inimigo);
+        console.log(`\nVida do Jogador: ${jogador.vida}`);
+        console.log(`Vida do Inimigo: ${inimigo.vida}`);
+
+        let acao = prompt("Escolha sua ação: (atacar, defender, usar magia, fugir)").toLowerCase();
+
+        if (acao === "atacar") {
+            atacar(jogador, inimigo);
+        } else if (acao === "defender") {
+            defender(jogador, inimigo);
+        } else if (acao === "usar magia") {
+            usarMagia(jogador, inimigo);
+        } else if (acao === "fugir") {
+            if (fugir()) return; // Saída da função se fugiu
+        } else {
+            console.log("Ação inválida, tente novamente.");
+            continue; // Volta ao início do loop
+        }
+
         if (inimigo.vida > 0) {
             atacar(inimigo, jogador);
         }
     }
 
     if (jogador.vida > 0) {
+        if(inimigo <= 0){
         console.log(`Você derrotou o ${inimigo.nome}!`);
-    } else {
-        console.log("Você foi derrotado!");
-    }
-}
-
-// Função para selecionar personagem
-function selecionarPersonagem(personagemEscolhido) {
-    if (personagens[personagemEscolhido]) {
-        jogador = { ...personagens[personagemEscolhido] };
-        console.log(`Você escolheu: ${jogador.nome}`);
-        iniciarMissao();
-    } else {
-        console.log("Personagem inválido. Escolha entre: cavaleiro, mago, arqueiro, balanceado.");
+        }
+        else{
+            console.log("Você fugiu e conseguiu recuperar o artefato.")
+        }
+    }else {
+        console.log("Você foi derrotado!" + "\nGame over");
     }
 }
 
@@ -77,24 +110,40 @@ function iniciarMissao() {
 
 // Função para entregar o artefato
 function entregarArtefato() {
-    const entrega = prompt("Você derrotou o Guardião! Deseja entregar o artefato ao rei? (sim/não)").toLowerCase();
+    const entrega = prompt("Você volta ao reino e se encontra com o rei. Você deseja entregar o artefato ao rei? (sim/não)").toLowerCase();
     
     if (entrega === 'sim') {
         console.log("Parabéns! Você entregou o artefato ao rei e completou sua missão!");
     } else if (entrega === 'não') {
-        console.log("Você decidiu não entregar o artefato. Sua aventura continua...");
-        // Aqui você pode adicionar mais lógica se desejar
+        console.log("Você decidiu não entregar o artefato. E sua aventura continua.... até final do ano letivo que o jogo original chegarar");
     } else {
         console.log("Resposta inválida. O artefato ainda está com você.");
         entregarArtefato(); // Pergunta novamente
     }
 }
 
-// Alerta de boas-vindas ao iniciar o jogo
-alert("Bem-vindo ao jogo de RPG 'Missão das Ruínas Antigas'!\n" +
-      "Escolha seu personagem digitando: \nselecionar Personagem(Cavaleiro)" +
-      "\nselecionar Personagem(Mago)\nselecionar Personagem(Arqueiro)" +
-      "\nselecionar Personagem(Balanceado)");
+// Função para selecionar personagem
+function selecionarPersonagem(personagemEscolhido) {
+    if (personagens[personagemEscolhido]) {
+        jogador = { ...personagens[personagemEscolhido] };
+        console.log(`Você escolheu: ${jogador.nome}`);
+        iniciarMissao();
+    } else {
+        console.log("Personagem inválido. Escolha entre: cavaleiro, mago, arqueiro, balanceado.");
+        iniciarJogo(); // Reinicia o jogo se a escolha for inválida
+    }
+}
 
-// Exemplo de chamada inicial
-console.log("Digite seu personagem para começar a aventura!");
+// Função para iniciar o jogo
+function iniciarJogo() {
+    alert("Bem-vindo ao jogo de RPG 'Missão das Ruínas Antigas'!\n"
+        + "Esta pronto para aventura? "
+    );
+    const personagemEscolhido = prompt("Digite o personagem que você quer jogar: " +
+        "Escolha seu personagem digitando:\n" +
+        "cavaleiro\nmago\narqueiro\npersonalizado").toLowerCase();
+    selecionarPersonagem(personagemEscolhido);
+}
+
+// Chamada inicial para iniciar o jogo
+iniciarJogo();
