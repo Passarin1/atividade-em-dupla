@@ -3,13 +3,11 @@ const personagens = {
     cavaleiro: { nome: "Cavaleiro", vida: 100, ataque: 15, defesa: 10, magia: null, itens: [] },
     mago: { nome: "Mago", vida: 70, ataque: 25, defesa: 5, magia: "Bola de Fogo", itens: [] },
     arqueiro: { nome: "Arqueiro", vida: 80, ataque: 20, defesa: 8, magia: null, itens: [] },
-    personalizado: { nome: "personalizado", vida: 85, ataque: 18, defesa: 9, magia: "Raio", itens: [] }
+    personalizado: { nome: "Personalizado", vida: 85, ataque: 18, defesa: 9, magia: "Raio", itens: [] }
 };
 
-// Criaturas Demônios Menores
+// Criaturas
 const demonioMenor = { nome: "Demônio Menor", vida: 40, ataque: 12, defesa: 4 };
-
-// Guardião Demoníaco
 const guardiao = { nome: "Guardião Demoníaco", vida: 150, ataque: 20, defesa: 8 };
 
 let jogador;
@@ -33,7 +31,7 @@ function atacar(atacante, defensor) {
 }
 
 // Função de defesa
-function defender(atacante, defensor) {
+function defender(defensor) {
     console.log(`${defensor.nome} se preparou para defender!`);
     defensor.defesa *= 2; // Aumenta a defesa temporariamente
 }
@@ -69,7 +67,7 @@ function iniciarCombate(inimigo) {
         if (acao === "atacar") {
             atacar(jogador, inimigo);
         } else if (acao === "defender") {
-            defender(jogador, inimigo);
+            defender(jogador);
         } else if (acao === "usar magia") {
             usarMagia(jogador, inimigo);
         } else if (acao === "fugir") {
@@ -85,14 +83,9 @@ function iniciarCombate(inimigo) {
     }
 
     if (jogador.vida > 0) {
-        if(inimigo <= 0){
         console.log(`Você derrotou o ${inimigo.nome}!`);
-        }
-        else{
-            console.log("Você fugiu e conseguiu recuperar o artefato.")
-        }
-    }else {
-        console.log("Você foi derrotado!" + "\nGame over");
+    } else {
+        console.log("Você foi derrotado!\nGame over");
     }
 }
 
@@ -115,7 +108,7 @@ function entregarArtefato() {
     if (entrega === 'sim') {
         console.log("Parabéns! Você entregou o artefato ao rei e completou sua missão!");
     } else if (entrega === 'não') {
-        console.log("Você decidiu não entregar o artefato. E sua aventura continua.... até final do ano letivo que o jogo original chegarar");
+        console.log("Você decidiu não entregar o artefato. Sua aventura continua...");
     } else {
         console.log("Resposta inválida. O artefato ainda está com você.");
         entregarArtefato(); // Pergunta novamente
@@ -129,16 +122,14 @@ function selecionarPersonagem(personagemEscolhido) {
         console.log(`Você escolheu: ${jogador.nome}`);
         iniciarMissao();
     } else {
-        console.log("Personagem inválido. Escolha entre: cavaleiro, mago, arqueiro, balanceado.");
+        console.log("Personagem inválido. Escolha entre: cavaleiro, mago, arqueiro, personalizado.");
         iniciarJogo(); // Reinicia o jogo se a escolha for inválida
     }
 }
 
 // Função para iniciar o jogo
 function iniciarJogo() {
-    alert("Bem-vindo ao jogo de RPG 'Missão das Ruínas Antigas'!\n"
-        + "Esta pronto para aventura? "
-    );
+    alert("Bem-vindo ao jogo de RPG 'Missão das Ruínas Antigas'!\nEstá pronto para a aventura?");
     const personagemEscolhido = prompt("Digite o personagem que você quer jogar: " +
         "Escolha seu personagem digitando:\n" +
         "cavaleiro\nmago\narqueiro\npersonalizado").toLowerCase();
